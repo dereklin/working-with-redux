@@ -11,27 +11,37 @@ export default class Form extends Component {
   render() {
     return (
       <div>
-        <form onSubmit={this.props.handleSubmit} className="col s12">
+        <form onSubmit={(event) => {
+            event.preventDefault();
+            const note = {
+              id: require('crypto').randomBytes(5).toString('hex'),
+              title: this.refs.title.value,
+              details: this.refs.details.value
+            }
+            this.refs.title.value = '';
+            this.refs.details.value = '';
+            this.props.addNewNote(note);
+          }
+        }
+          className="col s12">
           <div className="row">
             <div className="input-field col s3">
               <input 
                 id="title"
                 name="currentTitle"
-                type="text" 
-                value={this.props.currentTitle} 
-                onChange={this.props.handleChange} 
+                type="text"
+                ref="title"
                 className="validate"/>
                 <label htmlFor="title">Title</label>
             </div>
             <div className="input-field col s7">
               <input
-                id="details"
+                id="currentDetails"
                 name="currentDetails"
                 type="text" 
-                value={this.props.currentDetails} 
-                onChange={this.props.handleChange}
-                className="validate" />
-              <label htmlFor="details">Details</label>
+                className="validate"
+                ref="details" />
+              <label htmlFor="currentDetails">Details</label>
             </div>
             <div className="input-field col s2">
                 <button className="btn-large waves-effect waves-light" 
